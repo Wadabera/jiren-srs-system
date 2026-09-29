@@ -6,9 +6,46 @@
    rewrite every page, the desktop grids are neutralised on small
    screens and the content stacks to a single column.
 
-   Verified against a 320 / 390 / 768px probe: the page must never
+   Verified against a 320 / 360 / 390 / 414px probe: the page must never
    scroll horizontally.
    =================================================================== */
+
+/* --- iOS text auto-sizing -----------------------------------------
+   Safari inflates font sizes in narrow viewports ("text boosting"),
+   which widens text past the viewport and produces a sideways scroll
+   that no desktop browser reproduces. Pinning text-size-adjust stops it. */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  /* `clip` (not `hidden`) keeps overflow unreachable without turning the
+     viewport into a scroll container. */
+  overflow-x: clip;
+  max-width: 100%;
+}
+
+body {
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+/* Grid and flex children default to min-width:auto, so a wide child
+   (table, chart, long unbroken string) can push its track wider than the
+   viewport. This is the most common cause of a page that scrolls sideways
+   on a phone. */
+.sidebar-layout > *,
+.main-wrapper > *,
+.main-content > *,
+.card > * {
+  min-width: 0;
+  max-width: 100%;
+}
+
+/* Tables scroll inside their own container only. */
+.table-container {
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
 
 /* --- Inline desktop grids collapse to one column ------------------- */
 @media (max-width: 900px) {

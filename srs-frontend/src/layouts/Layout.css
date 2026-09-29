@@ -399,7 +399,9 @@
     height: 100vh;
     z-index: 1000;
     transition: left 0.35s var(--ease-out);
-    width: 280px !important;
+    /* never wider than the viewport itself */
+    width: min(280px, 82vw) !important;
+    max-width: 82vw;
     box-shadow: 24px 0 60px -30px rgba(0, 0, 0, 0.9);
   }
 
