@@ -58,16 +58,24 @@ Manual configuration instead of the blueprint:
 
 Render injects `PORT` automatically; the app binds `0.0.0.0` to read it.
 
-When it deploys you get a URL like `https://srs-backend-xxxx.onrender.com`.
+The backend is already live at:
+
+```
+https://jiren-srs-system.onrender.com
+```
+
 Verify it:
 
 ```
-https://srs-backend-xxxx.onrender.com/api/health
+https://jiren-srs-system.onrender.com/api/health
 -> {"status":"ok","service":"srs-backend","database":"connected",...}
 ```
 
 `database: connected` matters. If it says `degraded`, Atlas is unreachable —
 check the IP access list, not the code.
+
+**The free plan sleeps after ~15 minutes idle.** The first request can take
+30-50s to wake up. Hit the health endpoint a minute before a demo to warm it.
 
 ---
 
@@ -88,7 +96,7 @@ Then **Settings → Environment Variables** and add:
 
 | Name            | Value |
 | --------------- | ----- |
-| `VITE_API_URL`  | `https://srs-backend-xxxx.onrender.com/api` |
+| `VITE_API_URL`  | `https://jiren-srs-system.onrender.com/api` |
 
 Deploy. You get `https://srs-frontend-xxxx.vercel.app`.
 
@@ -104,9 +112,6 @@ Now that you have the Vercel URL, go back to Render and set:
 ```
 CORS_ORIGINS=https://srs-frontend-xxxx.vercel.app
 ```
-
-Multiple origins are comma separated. Save, and Render redeploys. Add your
-custom domain too if you use one.
 
 **Order matters.** Without this the frontend loads but every API call is blocked
 by the browser, which looks like a broken app rather than a CORS problem.
