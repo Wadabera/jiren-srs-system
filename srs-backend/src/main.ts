@@ -13,13 +13,27 @@ async function bootstrap() {
   // Allowed origins come from CORS_ORIGINS (comma separated) so the deployed
   // frontend can be allowed without a code change. Localhost is always kept
   // so `npm run dev` keeps working.
+  // Values are normalised because a trailing slash, stray whitespace, wrapping
+  // quotes or mixed case all cause a mismatch against the browser's Origin
+  // header, and the symptom is an invisible CORS failure rather than an error.
   const configured = (process.env.CORS_ORIGINS || '')
     .split(',')
-    .map((o) => o.trim())
+    .map((o) =>
+      o
+        .trim()
+        .replace(/^['"]|['"]$/g, '') // wrapping quotes
+        .replace(/\/+$/, '') // trailing slashes
+        .toLowerCase(),
+    )
     .filter(Boolean);
 
   const localOrigins = ['http://localhost:5173', 'http://localhost:3000', 'http://127.0.0.1:5173'];
   const allowlist = [...new Set([...localOrigins, ...configured])];
+
+  console.log('--- CORS configuration ---');
+  console.log('  CORS_ORIGINS raw :', JSON.stringify(process.env.CORS_ORIGINS ?? '(unset)'));
+  console.log('  allowed origins  :', allowlist.join(', '));
+  console.log('--------------------------');
 
   app.enableCors({
     origin: allowlist,
