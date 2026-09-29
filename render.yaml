@@ -14,7 +14,12 @@ services:
     healthCheckPath: /api/health
     autoDeploy: true
 
+    # Render otherwise picks the newest Node available (26.x). This pins the
+    # major version the project is actually verified against.
     envVars:
+      - key: NODE_VERSION
+        value: 24
+
       # --- required: copy these from srs-backend/.env ---
       - key: MONGODB_URI
         sync: false
