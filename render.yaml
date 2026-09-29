@@ -1,0 +1,42 @@
+# Render blueprint for the SRS NestJS backend.
+# Docs: https://render.com/docs/blueprint-spec
+
+services:
+  - type: web
+    name: srs-backend
+    runtime: node
+    plan: free          # change to `starter` when you need no cold starts
+    region: frankfurt   # nearest to the Atlas cluster (eu-central)
+    branch: main
+    rootDir: srs-backend
+    buildCommand: npm ci && npm run build
+    startCommand: npm run start:prod
+    healthCheckPath: /api/health
+    autoDeploy: true
+
+    envVars:
+      # --- required: copy these from srs-backend/.env ---
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true   # override with your own before going live
+      - key: JWT_REFRESH_SECRET
+        generateValue: true   # override with your own before going live
+      - key: JWT_EXPIRY
+        value: 1d
+      - key: JWT_REFRESH_EXPIRY
+        value: 7d
+
+      # --- set this to your Vercel URL, e.g. https://srs-frontend.vercel.app ---
+      - key: CORS_ORIGINS
+        sync: false
+
+      # --- optional: avatar / banner uploads ---
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+
+      # Render sets PORT automatically; app.listen reads it.

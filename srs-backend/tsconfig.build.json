@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    // Pin the output root to src. Without this, the stray TypeScript files in
+    // scratch/ widen the inferred common root and the build emits
+    // dist/src/main.js instead of dist/main.js, which breaks `start:prod`.
+    "rootDir": "./src"
+  },
+  "exclude": ["node_modules", "test", "dist", "scratch", "scripts", "**/*spec.ts"]
+}

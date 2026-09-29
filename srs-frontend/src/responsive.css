@@ -1,0 +1,139 @@
+/* ===================================================================
+   Responsive overrides
+   -------------------------------------------------------------------
+   Most layout here uses inline `style={{ gridTemplateColumns: ... }}`,
+   which a media query cannot beat without !important. Rather than
+   rewrite every page, the desktop grids are neutralised on small
+   screens and the content stacks to a single column.
+
+   Verified against a 320 / 390 / 768px probe: the page must never
+   scroll horizontally.
+   =================================================================== */
+
+/* --- Inline desktop grids collapse to one column ------------------- */
+@media (max-width: 900px) {
+  [style*="grid-template-columns: 1fr 1fr 1fr"],
+  [style*="grid-template-columns:1fr 1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  [style*="grid-template-columns: 1fr 1fr"],
+  [style*="grid-template-columns:1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  [style*="grid-template-columns: 2fr 1fr"],
+  [style*="grid-template-columns:2fr 1fr"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* auto-fit with a 300px floor cannot shrink below 300px, which is
+     wider than a 320px phone minus padding */
+  [style*="minmax(300px, 1fr)"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  [style*="minmax(400px, 1fr)"] {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* --- Wide padding inside pages ------------------------------------- */
+@media (max-width: 900px) {
+  .main-content {
+    padding: 26px 16px !important;
+  }
+
+  .card {
+    padding: 22px 18px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-content {
+    padding: 20px 12px !important;
+  }
+
+  .card {
+    padding: 18px 14px !important;
+  }
+}
+
+/* --- Big dashboard banners use fixed padding and 3.5rem headings --- */
+@media (max-width: 900px) {
+  [style*="padding: '60px 40px'"] {
+    padding: 34px 20px !important;
+  }
+
+  [style*="fontSize: '3.5rem'"] {
+    font-size: 1.7rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  [style*="padding: 60px 40px"] {
+    padding: 26px 16px !important;
+  }
+}
+
+/* --- Profile photo is a fixed 180px box pinned to the right ---------- */
+@media (max-width: 768px) {
+  .profile-banner-container {
+    height: 220px;
+    margin-bottom: 80px;
+  }
+
+  .profile-pic-container {
+    width: 120px !important;
+    height: 120px !important;
+    top: 20px;
+    right: 16px;
+  }
+}
+
+/* --- Tables scroll horizontally inside their own container ---------- */
+.table-container {
+  -webkit-overflow-scrolling: touch;
+}
+
+.table th,
+.table td {
+  padding: 13px 14px;
+}
+
+/* --- Long words must not force the page wide ----------------------- */
+body,
+h1, h2, h3, h4, h5, h6,
+p, span, td, th, label, code {
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+/* --- Forms --------------------------------------------------------- */
+@media (max-width: 480px) {
+  .form-control {
+    padding: 13px 15px;
+    font-size: 0.95rem;
+  }
+
+  .btn {
+    padding: 12px 20px;
+    font-size: 0.85rem;
+  }
+}
+
+/* --- Chart panels need an explicit height on narrow screens -------- */
+@media (max-width: 640px) {
+  [style*="height: 400"] {
+    height: 280px !important;
+  }
+
+  [style*="width: '220px'"] {
+    width: 180px !important;
+  }
+}
+
+/* --- Recharts sometimes measures -1 before layout settles --------- */
+.recharts-responsive-container {
+  min-width: 0 !important;
+}
