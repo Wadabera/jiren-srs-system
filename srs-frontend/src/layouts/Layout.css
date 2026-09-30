@@ -328,32 +328,41 @@
     flex-direction: column;
   }
 
-  .sidebar {
-    width: 100%;
-    height: auto;
-    border-right: none;
-    border-bottom: 1px solid var(--border);
-  }
-
+  /* The sidebar is an off-canvas drawer on mobile, not a horizontal top bar.
+     The nav therefore stays a vertical list inside a full-height panel. */
   .sidebar-nav {
-    flex-direction: row;
-    overflow-x: auto;
-    padding: 10px;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+    align-items: stretch;
+    gap: 4px;
+    padding: 14px 12px 24px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
   }
 
+  /* align-items defaults to stretch, which in a column flex container makes
+     each row take the full panel width - fine - but in a tall panel it also
+     stretches items vertically. `auto` keeps every row one tap-height. */
   .nav-item {
-    padding: 10px 18px;
+    flex: 0 0 auto;
+    width: 100%;
+    padding: 13px 16px;
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
+  /* Indicator is a left rail again, matching the vertical list. */
   .nav-item.active::before {
-    left: 50%;
-    top: auto;
-    bottom: -10px;
-    transform: translateX(-50%);
-    width: 22px;
-    height: 4px;
-    border-radius: 4px 4px 0 0;
+    left: -12px;
+    top: 50%;
+    bottom: auto;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 22px;
+    border-radius: 0 4px 4px 0;
   }
 
   .admin-header {
@@ -397,16 +406,28 @@
     left: -100% !important;
     top: 0;
     height: 100vh;
+    /* 100dvh tracks the mobile URL bar; 100vh alone leaves the panel
+       taller than the visible area once the bar collapses. */
+    height: 100dvh;
     z-index: 1000;
     transition: left 0.35s var(--ease-out);
     /* never wider than the viewport itself */
     width: min(280px, 82vw) !important;
     max-width: 82vw;
+    /* solid panel so content behind cannot bleed through */
+    background: var(--brand-black);
+    border-right: 1px solid var(--border);
     box-shadow: 24px 0 60px -30px rgba(0, 0, 0, 0.9);
+    overflow: hidden;
   }
 
   .sidebar.open {
     left: 0 !important;
+  }
+
+  .sidebar-header {
+    height: 76px;
+    flex-shrink: 0;
   }
 
   .sidebar-close {

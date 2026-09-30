@@ -4,7 +4,14 @@
     // Pin the output root to src. Without this, the stray TypeScript files in
     // scratch/ widen the inferred common root and the build emits
     // dist/src/main.js instead of dist/main.js, which breaks `start:prod`.
-    "rootDir": "./src"
+    "rootDir": "./src",
+    // `incremental` (inherited from tsconfig.json) leaves a tsbuildinfo file
+    // that survives after dist/ is deleted. The next build then believes
+    // everything is up to date, emits nothing, and `nest start` fails with
+    // "Cannot find module dist/main". Always emitting costs a few seconds and
+    // makes the build deterministic.
+    "incremental": false,
+    "tsBuildInfoFile": null
   },
   "exclude": ["node_modules", "test", "dist", "scratch", "scripts", "**/*spec.ts"]
 }
